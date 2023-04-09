@@ -421,7 +421,7 @@ int HttpClient::responseStatusCode()
         {
             if (available())
             {
-                c = read();
+                c = HttpClient::read();
                 if (c != -1)
                 {
                     switch(iState)
@@ -762,7 +762,7 @@ int HttpClient::read(uint8_t *buf, size_t size)
 
 int HttpClient::readHeader()
 {
-    char c = read();
+    char c = HttpClient::read();
 
     if (endOfHeadersReached())
     {
