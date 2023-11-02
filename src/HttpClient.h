@@ -43,6 +43,7 @@ class HttpClient : public Client
 public:
     static const int kNoContentLengthHeader =-1;
     static const int kHttpPort =80;
+    static const int kHttpsPort =443;
     static const char* kUserAgent;
 
 // FIXME Write longer API request, using port and user-agent, example
