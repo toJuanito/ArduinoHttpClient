@@ -15,6 +15,18 @@
  * limitations under the License.
  */
 
+/*
+ * The following class is defined in mbed libraries, in case of STM32H7 include the original library
+ */
+#if defined __has_include
+#  if __has_include(<utility/http_parsed_url.h>)
+#    include <utility/http_parsed_url.h>
+#  else
+#    define NO_HTTP_PARSED
+#  endif
+#endif
+
+#ifdef NO_HTTP_PARSED
 #ifndef _MBED_HTTP_PARSED_URL_H_
 #define _MBED_HTTP_PARSED_URL_H_
 
@@ -92,3 +104,5 @@ private:
 };
 
 #endif // _MBED_HTTP_PARSED_URL_H_
+#endif // NO_HTTP_PARSED
+#undef NO_HTTP_PARSED

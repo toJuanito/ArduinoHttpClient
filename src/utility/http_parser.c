@@ -1,3 +1,10 @@
+#if defined __has_include
+#  if ! __has_include(<utility/http_parser/http_parser.h>) && ! __has_include(<http_parser.h>)
+#    define NO_HTTP_PARSER
+#  endif
+#endif
+
+#ifdef NO_HTTP_PARSER
 /* Based on src/http/ngx_http_parse.c from NGINX copyright Igor Sysoev
  *
  * Additional changes are licensed under the same terms as NGINX and
@@ -580,3 +587,5 @@ http_parser_version(void) {
          HTTP_PARSER_VERSION_MINOR * 0x00100 |
          HTTP_PARSER_VERSION_PATCH * 0x00001;
 }
+
+#endif // NO_HTTP_PARSER
