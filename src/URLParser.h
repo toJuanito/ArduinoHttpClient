@@ -30,7 +30,7 @@
 #ifndef _MBED_HTTP_PARSED_URL_H_
 #define _MBED_HTTP_PARSED_URL_H_
 
-#include "utility/http_parser.h"
+#include "utility/URLParser/http_parser.h"
 
 class ParsedUrl {
 public:
