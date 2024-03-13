@@ -12,15 +12,15 @@ void setup() {
         "https://www.google.com/search?q=arduino"
     );
 
-    Serial.print("parsed url schema: \"");
+    Serial.print("parsed URL schema: \"");
     Serial.print(url.schema());
-    Serial.print("\"\nparsed url host: \"");
+    Serial.print("\"\nparsed URL host: \"");
     Serial.print(url.host());
-    Serial.print("\"\nparsed url path: \"");
+    Serial.print("\"\nparsed URL path: \"");
     Serial.print(url.path());
-    Serial.print("\"\nparsed url query: \"");
+    Serial.print("\"\nparsed URL query: \"");
     Serial.print(url.query());
-    Serial.print("\"\nparsed url userinfo: \"");
+    Serial.print("\"\nparsed URL userinfo: \"");
     Serial.print(url.userinfo());
     Serial.println("\"");
 
