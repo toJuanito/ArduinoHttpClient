@@ -317,6 +317,8 @@ public:
     virtual operator bool() { return bool(iClient); };
     virtual uint32_t httpResponseTimeout() { return iHttpResponseTimeout; };
     virtual void setHttpResponseTimeout(uint32_t timeout) { iHttpResponseTimeout = timeout; };
+    virtual uint32_t httpWaitForDataDelay() { return iHttpWaitForDataDelay; };
+    virtual void setHttpWaitForDataDelay(uint32_t delay) { iHttpWaitForDataDelay = delay; };
 protected:
     /** Reset internal state data back to the "just initialised" state
     */
@@ -384,6 +386,7 @@ protected:
     // Stores the value of the current chunk length, if present
     int iChunkLength;
     uint32_t iHttpResponseTimeout;
+    uint32_t iHttpWaitForDataDelay;
     bool iConnectionClose;
     bool iSendDefaultRequestHeaders;
     String iHeaderLine;
