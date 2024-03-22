@@ -162,7 +162,7 @@ int HttpClient::sendInitialHeaders(const char* aURLPath, const char* aHttpMethod
         {
             iClient->print("Host: ");
             iClient->print(iServerName);
-            if (iServerPort != kHttpPort)
+            if (iServerPort != kHttpPort && iServerPort != kHttpsPort)
             {
               iClient->print(":");
               iClient->print(iServerPort);
