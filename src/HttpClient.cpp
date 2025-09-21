@@ -40,7 +40,6 @@ void HttpClient::resetState()
   iIsChunked = false;
   iChunkLength = 0;
   iHttpResponseTimeout = kHttpResponseTimeout;
-  iHttpWaitForDataDelay = kHttpWaitForDataDelay;
 }
 
 void HttpClient::stop()
@@ -85,7 +84,7 @@ int HttpClient::startRequest(const char* aURLPath, const char* aHttpMethod,
     {
         if (iServerName)
         {
-            if (!(iClient->connect(iServerName, iServerPort) > 0))
+            if (!iClient->connect(iServerName, iServerPort) > 0)
             {
 #ifdef LOGGING
                 Serial.println("Connection failed");
@@ -95,7 +94,7 @@ int HttpClient::startRequest(const char* aURLPath, const char* aHttpMethod,
         }
         else
         {
-            if (!(iClient->connect(iServerAddress, iServerPort) > 0))
+            if (!iClient->connect(iServerAddress, iServerPort) > 0)
             {
 #ifdef LOGGING
                 Serial.println("Connection failed");
@@ -162,7 +161,7 @@ int HttpClient::sendInitialHeaders(const char* aURLPath, const char* aHttpMethod
         {
             iClient->print("Host: ");
             iClient->print(iServerName);
-            if (iServerPort != kHttpPort && iServerPort != kHttpsPort)
+            if (iServerPort != kHttpPort)
             {
               iClient->print(":");
               iClient->print(iServerPort);
@@ -422,7 +421,7 @@ int HttpClient::responseStatusCode()
         {
             if (available())
             {
-                c = HttpClient::read();
+                c = read();
                 if (c != -1)
                 {
                     switch(iState)
@@ -474,7 +473,7 @@ int HttpClient::responseStatusCode()
             {
                 // We haven't got any data, so let's pause to allow some to
                 // arrive
-                delay(iHttpWaitForDataDelay);
+                delay(kHttpWaitForDataDelay);
             }
         }
         if ( (c == '\n') && (iStatusCode < 200 && iStatusCode != 101) )
@@ -523,7 +522,7 @@ int HttpClient::skipResponseHeaders()
         {
             // We haven't got any data, so let's pause to allow some to
             // arrive
-            delay(iHttpWaitForDataDelay);
+            delay(kHttpWaitForDataDelay);
         }
     }
     if (endOfHeadersReached())
@@ -543,7 +542,7 @@ bool HttpClient::endOfHeadersReached()
     return (iState == eReadingBody || iState == eReadingChunkLength || iState == eReadingBodyChunk);
 };
 
-long HttpClient::contentLength()
+int HttpClient::contentLength()
 {
     // skip the response headers, if they haven't been read already 
     if (!endOfHeadersReached())
@@ -588,7 +587,7 @@ String HttpClient::responseBody()
     }
 
     if (bodyLength > 0 && (unsigned int)bodyLength != response.length()) {
-        // failure, we did not read in response content length bytes
+        // failure, we did not read in reponse content length bytes
         return String((const char*)NULL);
     }
 
@@ -686,7 +685,7 @@ int HttpClient::read()
 
 bool HttpClient::headerAvailable()
 {
-    // clear the currently stored header line
+    // clear the currently store header line
     iHeaderLine = "";
 
     while (!endOfHeadersReached())
@@ -763,7 +762,7 @@ int HttpClient::read(uint8_t *buf, size_t size)
 
 int HttpClient::readHeader()
 {
-    char c = HttpClient::read();
+    char c = read();
 
     if (endOfHeadersReached())
     {
@@ -819,11 +818,7 @@ int HttpClient::readHeader()
     case eReadingContentLength:
         if (isdigit(c))
         {
-            long _iContentLength = iContentLength*10 + (c - '0');
-            // Only apply if the value didn't wrap around
-            if (_iContentLength > iContentLength) {
-                iContentLength = _iContentLength;
-            }
+            iContentLength = iContentLength*10 + (c - '0');
         }
         else
         {

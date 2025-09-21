@@ -43,7 +43,6 @@ class HttpClient : public Client
 public:
     static const int kNoContentLengthHeader =-1;
     static const int kHttpPort =80;
-    static const int kHttpsPort =443;
     static const char* kUserAgent;
 
 // FIXME Write longer API request, using port and user-agent, example
@@ -229,7 +228,7 @@ public:
     */
     String readHeaderName();
 
-    /** Read the value of the current response header.
+    /** Read the vallue of the current response header.
       Returns empty string if a header is not available.
     */
     String readHeaderValue();
@@ -273,7 +272,7 @@ public:
       @return Length of the body, in bytes, or kNoContentLengthHeader if no
       Content-Length header was returned by the server
     */
-    long contentLength();
+    int contentLength();
 
     /** Returns if the response body is chunked
       @return true if response body is chunked, false otherwise
@@ -318,8 +317,6 @@ public:
     virtual operator bool() { return bool(iClient); };
     virtual uint32_t httpResponseTimeout() { return iHttpResponseTimeout; };
     virtual void setHttpResponseTimeout(uint32_t timeout) { iHttpResponseTimeout = timeout; };
-    virtual uint32_t httpWaitForDataDelay() { return iHttpWaitForDataDelay; };
-    virtual void setHttpWaitForDataDelay(uint32_t delay) { iHttpWaitForDataDelay = delay; };
 protected:
     /** Reset internal state data back to the "just initialised" state
     */
@@ -343,8 +340,8 @@ protected:
 
     // Number of milliseconds that we wait each time there isn't any data
     // available to be read (during status code and header processing)
-    static const int kHttpWaitForDataDelay = 100;
-    // Number of milliseconds that we'll wait in total without receiving any
+    static const int kHttpWaitForDataDelay = 1000;
+    // Number of milliseconds that we'll wait in total without receiveing any
     // data before returning HTTP_ERROR_TIMED_OUT (during status code and header
     // processing)
     static const int kHttpResponseTimeout = 30*1000;
@@ -375,7 +372,7 @@ protected:
     // Stores the status code for the response, once known
     int iStatusCode;
     // Stores the value of the Content-Length header, if present
-    long iContentLength;
+    int iContentLength;
     // How many bytes of the response body have been read by the user
     int iBodyLengthConsumed;
     // How far through a Content-Length header prefix we are
@@ -387,7 +384,6 @@ protected:
     // Stores the value of the current chunk length, if present
     int iChunkLength;
     uint32_t iHttpResponseTimeout;
-    uint32_t iHttpWaitForDataDelay;
     bool iConnectionClose;
     bool iSendDefaultRequestHeaders;
     String iHeaderLine;

@@ -8,10 +8,6 @@
 
 #include "HttpClient.h"
 
-#ifndef WS_TX_BUFFER_SIZE
-  #define WS_TX_BUFFER_SIZE 128
-#endif
-
 static const int TYPE_CONTINUATION     = 0x0;
 static const int TYPE_TEXT             = 0x1;
 static const int TYPE_BINARY           = 0x2;
@@ -26,6 +22,13 @@ public:
     WebSocketClient(Client& aClient, const String& aServerName, uint16_t aServerPort = HttpClient::kHttpPort);
     WebSocketClient(Client& aClient, const IPAddress& aServerAddress, uint16_t aServerPort = HttpClient::kHttpPort);
 
+    /** Start the Web Socket connection to the specified path with headers
+      @param aPath     Path to use in request
+      @param additionalHeaders  2D array with headers
+      @param headerRows  amound of rows in additionalHeaders array
+      @return 0 if successful, else error
+     */
+    int begin(const char* aPath, char* (*additionalHeaders)[2], size_t headerRows);
     /** Start the Web Socket connection to the specified path
       @param aURLPath     Path to use in request (optional, "/" is used by default)
       @return 0 if successful, else error
@@ -90,7 +93,7 @@ private:
 private:
     bool iTxStarted;
     uint8_t iTxMessageType;
-    uint8_t iTxBuffer[WS_TX_BUFFER_SIZE];
+    uint8_t iTxBuffer[128];
     uint64_t iTxSize;
 
     uint8_t iRxOpCode;
